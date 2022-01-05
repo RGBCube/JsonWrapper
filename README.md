@@ -1,5 +1,6 @@
 # ClutterDB
 extremely simple JSON database made for infrequent changes which behaves like a dict
+this was made for ClutterBot (still in development)
 # Usage
 ```python
 from db import ClutterDB
