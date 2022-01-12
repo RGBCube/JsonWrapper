@@ -4,12 +4,14 @@ This was made for ClutterBot (still in development).
 # Docs
 ## `db.set(key: str, value)`
 Sets the key to the value in the JSON.
+## `db.get(key: str, default=None)`
+Returns the value of the key in the json, if the key isn't set in the json, it returns the default kwarg.
+## `db.all()`
+Returns all the JSON data.
 ## `db.rem(key: str)`
 Removes the key and value pair from the JSON.
 
 Note that this will not do anything if the key isn't set in the JSON.
-## `db.get(key: str, default=None)`
-Returns the value of the key in the json, if the key isn't set in the json, it returns the default kwarg.
 ## `db.nuke()`
 Deletes everything in the JSON.
 
