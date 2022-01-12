@@ -39,7 +39,8 @@ class ClutterDB:
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
         with open(self.path_to_json, mode="w") as json_file:
-            json.dump(json_data.pop(key, None), json_file, indent=4)
+            json_data.pop(key, None)
+            json.dump(json_data, json_file, indent=4)
 
     def nuke(self):
         with open(self.path_to_json, mode="w") as json_file:
