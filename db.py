@@ -26,10 +26,8 @@ class ClutterDB:
             json_data = json.load(json_file)
             if key in json_data:
                 return json_data[key]
-            elif "default" in kwargs:
-                return kwargs["default"]
             else:
-                return None
+                return kwargs.get("default", None)
 
     def all(self):
         with open(self.path_to_json, mode="r") as json_file:
