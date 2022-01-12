@@ -17,15 +17,19 @@ Deletes everything in the JSON.
 
 Use with caution.
 # Usage
+Code:
 ```python
 from db import ClutterDB
 
 # initialization
 db = ClutterDB("path/to/json/file.json")
 
-# defining a variable 
-# (this will overrride the previous a if it was defined before)
+# defining the "a" variable 
+# (this will overrride the previous "a" if it was defined before)
 db.set("a", 12345)
+
+# another one for demonstration purposes
+db.set("b", 123456)
 
 # getting a variable 
 # (default kwarg will be returned if the key was not defined in the json)
@@ -34,9 +38,20 @@ data = db.get("a", default="a was not defined in the json")
 # prints data
 print(data)
 
-# removes the a from the json
+# gets all json data
+data = db.all()
+
+# prints data
+print(data)
+
+# removes the "a" from the json
 db.rem("a")
 
 # nukes the json
 db.nuke()
+```
+Output:
+```
+12345
+{'a': 12345, 'b': 123456}
 ```
