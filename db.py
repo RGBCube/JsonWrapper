@@ -18,7 +18,7 @@ class ClutterDB:
     def __init__(self, path_to_json: str):
         self.path_to_json = path_to_json
         self.utils = Utils()
-        self.utils.validate_json(self.
+        self.utils.validate_json(path_to_json)
 
     def set(self, key: str, value):
         self.utils.validate_json(self.path_to_json)
