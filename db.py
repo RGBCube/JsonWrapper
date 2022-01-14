@@ -24,10 +24,7 @@ class ClutterDB:
     def get(self, key: str, *, default=None):
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
-            if key in json_data:
-                return json_data[key]
-            else:
-                return default
+            return json_data.get(key, default)
 
     def all(self):
         with open(self.path_to_json, mode="r") as json_file:
