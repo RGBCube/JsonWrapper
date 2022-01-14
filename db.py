@@ -4,7 +4,7 @@ import os
 
 class Utils:
 
-    def json_check(self, path_to_json):
+    def validate_json(self, path_to_json):
         if not os.path.isfile(path_to_json):
             with open(path_to_json, "w") as json_file:
                 json.dump({}, json_file)
@@ -20,7 +20,7 @@ class ClutterDB:
         self.utils = Utils()
 
     def set(self, key: str, value):
-        self.utils.json_check(self.path_to_json)
+        self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
         with open(self.path_to_json, mode="w") as json_file:
@@ -28,18 +28,18 @@ class ClutterDB:
             json.dump(json_data, json_file, indent=4)
 
     def get(self, key: str, *, default=None):
-        self.utils.json_check(self.path_to_json)
+        self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
             return json_data.get(key, default)
 
     def all(self):
-        self.utils.json_check(self.path_to_json)
+        self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="r") as json_file:
             return json.load(json_file)
 
     def rem(self, key: str):
-        self.utils.json_check(self.path_to_json)
+        self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
         with open(self.path_to_json, mode="w") as json_file:
@@ -47,6 +47,6 @@ class ClutterDB:
             json.dump(json_data, json_file, indent=4)
 
     def nuke(self):
-        self.utils.json_check(self.path_to_json)
+        self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="w") as json_file:
             json.dump({}, json_file)
