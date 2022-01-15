@@ -41,7 +41,7 @@ Output
 {'test': 123}
 ```
 ## `db.get()`
-###
+### Normal usage
 Code
 ```python
 from db import ClutterDB
@@ -51,6 +51,36 @@ db = ClutterDB("db.json")
 db.set("test", 123)
 
 data = db.get("test")
+
+print(data)
+```
+Output
+```
+123
+```
+### Using without `default` kwarg
+Code
+```python
+from db import ClutterDB
+
+db = ClutterDB("db.json")
+
+data = db.get("test")
+
+print(data)
+```
+Output
+```
+None
+```
+### Using with `default` kwarg
+Code
+```python
+from db import ClutterDB
+
+db = ClutterDB("db.json")
+
+data = db.get("test", default=123)
 
 print(data)
 ```
