@@ -7,8 +7,9 @@ Clone [this](https://github.com/Clutter-Cluster/ClutterDB/blob/main/db.py) file 
 
 Add `from db import CluttterDB` to the top of your project.
 # Docs
-## `db.set(key: str, value)`
+## `db.set(key: str, value, *, pathmagic="")`
 Sets the key to the value in the JSON.
+if the `pathmagic` is given, it will spit it by the `+`'s and make dicts(or use existing ones) until it finishes, then it will set the value to the key in the last dict.
 ## `db.get(key: str, *, default=None)`
 Returns the value of the key in the json, if the key isn't set in the json, it returns the default kwarg.
 ## `db.all()`
@@ -22,41 +23,39 @@ Deletes everything in the JSON.
 
 Use with caution.
 # Examples
-Code:
+# `db.set("test", 123)`
+Code
 ```python
 from db import ClutterDB
 
-# initialization
-db = ClutterDB("path/to/json/file.json")
+db = ClutterDB("db.json")
 
-# defining the "a" variable 
-# (this will overrride the previous "a" if it was defined before)
-db.set("a", 12345)
+db.set("test", 123)
 
-# another one for demonstration purposes
-db.set("b", 123456)
-
-# getting a variable 
-# (default kwarg will be returned if the key was not defined in the json)
-data = db.get("a", default="a was not defined in the json")
-
-# prints data
-print(data)
-
-# gets all json data
 data = db.all()
 
-# prints data
+print(data)
+```
+Output
+`{'test': 123}`
+# `db.rem("test")`
+Code
+```python
+from db import ClutterDB
+
+db = ClutterDB("db.json")
+
+db.set("test", 123)
+
+data = db.all()
+
 print(data)
 
-# removes the "a" from the json
-db.rem("a")
+db.rem("test")
 
-# nukes the json
-db.nuke()
-```
-Output:
-```
-12345
-{'a': 12345, 'b': 123456}
-```
+data = db.all()
+
+print(data)```
+Output
+`{'test': 123}
+{}`
