@@ -21,9 +21,11 @@ class Utils:
                 alt_dict[key] = {}
                 return alt_dict
         main_dict_ref = main_dict
+        i = 0
         for dict_name in path.split("+"):
+            i += 1
             main_dict = magic(main_dict, dict_name)[dict_name]
-            if path.split("+").index(dict_name) == len(path.split("+")) - 1:
+            if i == len(path.split("+")):
                 main_dict[key] = value
         return main_dict_ref
 
