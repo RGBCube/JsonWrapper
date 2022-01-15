@@ -40,6 +40,23 @@ Output
 ```
 {'test': 123}
 ```
+## `db.get("test")`
+Code
+```python
+from db import ClutterDB
+
+db = ClutterDB("db.json")
+
+db.set("test", 123)
+
+data = db.get("test")
+
+print(data)
+```
+Output
+```
+123
+```
 ## `db.rem("test")`
 Code
 ```python
