@@ -50,7 +50,7 @@ from db import ClutterDB
 
 db = ClutterDB("db.json")
 
-db.set("test", 123, pathmagic="first+second+third")
+db.set("test", 123, pathmagic="a+b+c")
 
 data = db.all()
 
@@ -58,7 +58,7 @@ print(data)
 ```
 Output
 ```
-{'first': {'second': {'third': {'test': 123}}}}
+{'a': {'b': {'c': {'test': 123}}}}
 ```
 ## `db.get()`
 ### Normal usage
