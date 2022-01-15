@@ -23,7 +23,7 @@ Deletes everything in the JSON.
 
 Use with caution.
 # Examples
-## `db.set("test", 123)`
+## `db.set()`
 Code
 ```python
 from db import ClutterDB
@@ -40,7 +40,8 @@ Output
 ```
 {'test': 123}
 ```
-## `db.get("test")`
+## `db.get()`
+###
 Code
 ```python
 from db import ClutterDB
@@ -57,7 +58,7 @@ Output
 ```
 123
 ```
-## `db.rem("test")`
+## `db.rem()`
 Code
 ```python
 from db import ClutterDB
