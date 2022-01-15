@@ -1,7 +1,7 @@
 # 🈷️ ClutterDB
 Extremely simple JSON database which behaves like a dict.
 
-This was made for ClutterBot (still in development).
+This was made for small discord bots, for big bots you should not use this database.
 # 📥 Usage
 Clone [this](https://github.com/Clutter-Cluster/ClutterDB/blob/main/db.py) file into your project folder.
 
