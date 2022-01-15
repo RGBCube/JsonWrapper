@@ -20,8 +20,7 @@ class Utils:
             else:
                 alt_dict[key] = {}
                 return alt_dict
-        main_dict_ref = main_dict
-        i = 0
+        main_dict_ref, i = main_dict, 0
         for dict_name in path.split("+"):
             i += 1
             main_dict = magic(main_dict, dict_name)[dict_name]
