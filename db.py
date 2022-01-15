@@ -20,13 +20,12 @@ class Utils:
             else:
                 alt_dict[key] = {}
                 return alt_dict
-        exec_str = "main_dict"
+        main_dict_ref = main_dict
         for dict_name in path.split("+"):
-            exec_str = f"magic({exec_str}, '{dict_name}')['{dict_name}']"
-            if path.index(dict_name) == len(path) - 1:
-                exec_str = f"{exec_str}['{key}'] = {value}"
-        exec(exec_str)
-        return main_dict
+            main_dict = magic(main_dict, dict_name)[dict_name]
+            if path.split("+").index(dict_name) == len(path.split("+")) - 1:
+                main_dict[key] = value
+        return main_dict_ref
 
 class ClutterDB:
 
