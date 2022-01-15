@@ -37,7 +37,9 @@ data = db.all()
 print(data)
 ```
 Output
-`{'test': 123}`
+```
+{'test': 123}
+```
 ## `db.rem("test")`
 Code
 ```python
@@ -58,5 +60,7 @@ data = db.all()
 print(data)
 ```
 Output
-`{'test': 123}
-{}`
+```
+{'test': 123}
+{}
+```
