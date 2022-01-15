@@ -41,7 +41,7 @@ Output
 {'test': 123}
 ```
 ## `db.get()`
-### Normal usage
+#### Normal usage
 Code
 ```python
 from db import ClutterDB
@@ -58,7 +58,7 @@ Output
 ```
 123
 ```
-### Using without `default` kwarg
+#### Using without `default` kwarg
 Code
 ```python
 from db import ClutterDB
@@ -73,7 +73,7 @@ Output
 ```
 None
 ```
-### Using with `default` kwarg
+#### Using with `default` kwarg
 Code
 ```python
 from db import ClutterDB
