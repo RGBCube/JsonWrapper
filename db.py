@@ -13,7 +13,7 @@ class Utils:
                 with open(path_to_json, "w") as json_file:
                     json.dump({}, json_file)
 
-    def path_magic(self, main_dict: dict, path: str, *, key: str, value):
+    def path_magic_set(self, main_dict: dict, path: str, *, key: str, value):
         def magic(alt_dict: dict, key: str):
             if key in alt_dict.keys():
                 return alt_dict
@@ -27,6 +27,14 @@ class Utils:
             if i == len(path.split("+")):
                 main_dict[key] = value
         return main_dict_ref
+    
+    def path_magic_get(self, main_dict: dict, path: str, *, key, default=None):
+        for dict_name in path.split("+"):
+            try:
+                main_dict = main_dict[dict_name]
+            except (KeyError, AttributeError):
+                return default
+        return main_dict.get(key, default)
 
 class ClutterDB:
 
@@ -44,13 +52,16 @@ class ClutterDB:
                 json_data[key] = value
                 json.dump(json_data, json_file, indent=4)
             else:
-                json.dump(self.utils.path_magic(json_data, pathmagic, key=key, value=value), json_file, indent=4)
+                json.dump(self.utils.path_magic_set(json_data, pathmagic, key=key, value=value), json_file, indent=4)
 
-    def get(self, key: str, *, default=None):
+    def get(self, key: str, *, default=None, pathmagic=""):
         self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
-            return json_data.get(key, default)
+            if pathmagic == "":
+                return json_data.get(key, default)
+            else:
+                return self.utils.path_magic_get(json_data, pathmagic, key=key, default=default)
 
     def all(self):
         self.utils.validate_json(self.path_to_json)
