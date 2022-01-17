@@ -58,10 +58,7 @@ class ClutterDB:
         self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="r") as json_file:
             json_data = json.load(json_file)
-            if pathmagic == "":
-                return json_data.get(key, default)
-            else:
-                return self.utils.path_magic_get(json_data, pathmagic, key=key, default=default)
+            return json_data.get(key, default) if pathmagic == "" else return self.utils.path_magic_get(json_data, pathmagic, key=key, default=default)
 
     def all(self):
         self.utils.validate_json(self.path_to_json)
@@ -77,6 +74,5 @@ class ClutterDB:
             json.dump(json_data, json_file, indent=4)
 
     def nuke(self):
-        self.utils.validate_json(self.path_to_json)
         with open(self.path_to_json, mode="w") as json_file:
             json.dump({}, json_file)
