@@ -36,7 +36,7 @@ class Utils:
                 return default
         return main_dict.get(key, default)
 
-class ClutterDB:
+class JSONx:
 
     def __init__(self, path_to_json: str):
         self.path_to_json = path_to_json
