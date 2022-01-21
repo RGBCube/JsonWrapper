@@ -1,11 +1,11 @@
-# 🈷️ ClutterDB
-Extremely simple JSON database which behaves like a dict.
+# 🈷️ JSONx
+Easy JSON wrapper packed with features. 
 
 This was made for small discord bots, for big bots you should not use this database.
 # 📥 Usage
-Clone [this](https://github.com/Clutter-Cluster/ClutterDB/blob/main/db.py) file into your project folder.
+Clone [this](https://github.com/RGBCube/JSONx/blob/main/db.py) file into your project folder.
 
-Add `from db import CluttterDB` to the top of your project.
+Add `from db import JSONx` to the top of your project.
 # 📄 Docs
 ## `db.set(key: str, value, *, pathmagic="")`
 Sets the key to the value in the JSON.
@@ -31,9 +31,9 @@ Use with caution.
 ### Normal usage
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 db.set("test", 123)
 
@@ -48,9 +48,9 @@ Output
 ### Using with `pathmagic` kwarg
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 db.set("test", 123, pathmagic="a+b+c")
 
@@ -66,9 +66,9 @@ Output
 ### Normal usage
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 db.set("test", 123)
 
@@ -83,9 +83,9 @@ Output
 ### Using without `default` kwarg
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 data = db.get("test")
 
@@ -98,9 +98,9 @@ None
 ### Using with `default` kwarg
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 data = db.get("test", default=123)
 
@@ -113,9 +113,9 @@ Output
 ### Using with `pathmagic` kwarg
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 db.set("test", 123, pathmagic="a+b+c")
 
@@ -130,9 +130,9 @@ Output
 ## `db.rem()`
 Code
 ```python
-from db import ClutterDB
+from db import JSONx
 
-db = ClutterDB("db.json")
+db = JSONx("db.json")
 
 db.set("test", 123)
 
