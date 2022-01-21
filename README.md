@@ -128,6 +128,7 @@ Output
 123
 ```
 ## `db.rem()`
+### Normal usage
 Code
 ```python
 from db import JSONx
@@ -150,4 +151,28 @@ Output
 ```
 {'test': 123}
 {}
+```
+### Using with `pathmagic` kwarg
+Code
+```python
+from db import JSONx
+
+db = JSONx("db.json")
+
+db.set("test", 123, pathmagic="a+b+c")
+
+data = db.all()
+
+print(data)
+
+db.rem("test", pathmagic="a+b+c")
+
+data = db.all()
+
+print(data)
+```
+Output
+```
+{'a': {'b': {'c': {'test': 123}}}}
+{'a': {'b': {'c': {}}}}
 ```
