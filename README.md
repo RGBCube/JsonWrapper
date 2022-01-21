@@ -11,6 +11,8 @@ Add `from db import JSONx` to the top of your project.
 Sets the key to the value in the JSON.
 
 if the `pathmagic` kwarg is given, it will spit it by the `+`'s and make dicts(or use existing ones) until it finishes, then it will set the value to the key in the last dict.
+
+Note that the `pathmagic` kwarg will override its path if it isnt a dict.
 ## `db.get(key: str, *, default=None, pathmagic="")`
 Returns the value of the key in the json, if the key isn't set in the json, it returns the default kwarg.
 
@@ -20,7 +22,7 @@ Returns all the JSON data.
 ## `db.rem(key: str, *, pathmagic="")`
 Removes the key and value pair from the JSON.
 
-Note that this will not do anything if the key isn't set in the JSON.
+Note that this will not do anything if the key isn't set in the JSON or the path is invalid.
 
 if the `pathmagic` kwarg is given, it will spit it by the `+`'s and follow the path in it in the JSON data, then it will remove the key and value pair.
 ## `db.nuke()`
