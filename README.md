@@ -1,7 +1,7 @@
 # 🈷️ JSONx
 Easy JSON wrapper packed with features. 
 
-This was made for small discord bots, for big bots you should not use this database.
+This was made for small discord bots, for big bots you should not use this JSON wrapper.
 # 📥 Usage
 Clone [this](https://github.com/RGBCube/JSONx/blob/main/db.py) file into your project folder.
 
