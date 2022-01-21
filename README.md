@@ -14,13 +14,15 @@ if the `pathmagic` kwarg is given, it will spit it by the `+`'s and make dicts(o
 ## `db.get(key: str, *, default=None, pathmagic="")`
 Returns the value of the key in the json, if the key isn't set in the json, it returns the default kwarg.
 
-if the `pathmagic` kwarg is given, it will spit it by the `+`'s and follow the path in it in the JSON data, will return the `default` kwarg if the path is empty or has a value that isnt a dict.
+if the `pathmagic` kwarg is given, it will spit it by the `+`'s and follow the path in it in the JSON data, it will return the `default` kwarg if the path is empty or has a value that isnt a dict.
 ## `db.all()`
 Returns all the JSON data.
-## `db.rem(key: str)`
+## `db.rem(key: str, *, pathmagic="")`
 Removes the key and value pair from the JSON.
 
 Note that this will not do anything if the key isn't set in the JSON.
+
+if the `pathmagic` kwarg is given, it will spit it by the `+`'s and follow the path in it in the JSON data, then it will remove the key and value pair.
 ## `db.nuke()`
 Deletes everything in the JSON.
 
