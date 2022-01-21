@@ -19,15 +19,10 @@ class Utils:
         @staticmethod
         def set(main_dict: dict, path: str, *, key: str, value):
             def magic(alt_dict: dict, key: str):
-                if key in alt_dict.keys():
-                    if isinstance(alt_dict[key], dict):
-                        return alt_dict
-                    else:
-                        alt_dict[key] = {}
-                        return alt_dict
-                else:
-                    alt_dict[key] = {}
+                if key in alt_dict.keys() and isinstance(alt_dict[key], dict):
                     return alt_dict
+                alt_dict[key] = {}
+                return alt_dict
             main_dict_ref, i = main_dict, 0
             for dict_name in path.split("+"):
                 i += 1
