@@ -6,7 +6,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="json_wrapper",
-    description="Easy JSON wrapper packed with features",
+    description="Easy to use JSON wrapper packed with features",
     long_description=long_description,
     long_description_content_type='text/markdown',
     url="https://github.com/RGBCube/json_wrapper",
