@@ -5,7 +5,7 @@ Execute `pip install json-wrapper`.
 
 Add `from json_wrapper import JsonWrapper` to the top of your project.
 # 📄 Docs
-> Assume that we did `db = JsonWrapper("example.json)`
+> Assume that we did `db = JsonWrapper("example.json")`
 ## `db.set(key: str, value, *, pathmagic="")`
 Sets the key to the value in the JSON.
 
