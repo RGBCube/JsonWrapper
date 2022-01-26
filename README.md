@@ -1,5 +1,5 @@
 # 🈷️ JsonWrapper
-Easy JSON wrapper packed with features. 
+Easy to use JSON wrapper packed with features. 
 # 📥 Usage
 Execute `pip install json-wrapper`.
 
