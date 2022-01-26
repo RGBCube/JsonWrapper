@@ -1,5 +1,7 @@
 # 🈷️ JsonWrapper
-Easy to use JSON wrapper packed with features. 
+Easy to use JSON wrapper packed with features.
+
+View it on PyPi: https://pypi.org/project/json-wrapper/
 # 📥 Usage
 Execute `pip install json-wrapper`.
 
