@@ -1,7 +1,7 @@
 # 🈷️ JsonWrapper
 Easy JSON wrapper packed with features. 
 # 📥 Usage
-Execute `pip install json_wrapper`.
+Execute `pip install json-wrapper`.
 
 Add `from json_wrapper import JsonWrapper` to the top of your project.
 # 📄 Docs
