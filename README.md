@@ -1,12 +1,11 @@
-# 🈷️ JSONx
+# 🈷️ JsonWrapper
 Easy JSON wrapper packed with features. 
-
-This was made for small discord bots, for big bots you should not use this JSON wrapper.
 # 📥 Usage
-Clone [this](https://github.com/RGBCube/JSONx/blob/main/db.py) file into your project folder.
+Execute `pip install json_wrapper`.
 
-Add `from db import JSONx` to the top of your project.
+Add `from json_wrapper import JsonWrapper` to the top of your project.
 # 📄 Docs
+> Assume that we did `db = JsonWrapper("example.json)`
 ## `db.set(key: str, value, *, pathmagic="")`
 Sets the key to the value in the JSON.
 
@@ -30,14 +29,14 @@ Deletes everything in the JSON.
 
 Use with caution.
 # 📘 Examples
-> Assume that the `db.json` file is empty
+> Assume that the `example.json` file is empty
 ## `db.set()`
 ### Normal usage
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 db.set("test", 123)
 
@@ -52,9 +51,9 @@ Output
 ### Using with `pathmagic` kwarg
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 db.set("test", 123, pathmagic="a+b+c")
 
@@ -70,9 +69,9 @@ Output
 ### Normal usage
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 db.set("test", 123)
 
@@ -87,9 +86,9 @@ Output
 ### Using without `default` kwarg
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 data = db.get("test")
 
@@ -102,9 +101,9 @@ None
 ### Using with `default` kwarg
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 data = db.get("test", default=123)
 
@@ -117,9 +116,9 @@ Output
 ### Using with `pathmagic` kwarg
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 db.set("test", 123, pathmagic="a+b+c")
 
@@ -135,9 +134,9 @@ Output
 ### Normal usage
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 db.set("test", 123)
 
@@ -159,9 +158,9 @@ Output
 ### Using with `pathmagic` kwarg
 Code
 ```python
-from db import JSONx
+from json_wrapper import JsonWrapper
 
-db = JSONx("db.json")
+db = JsonWrapper("example.json")
 
 db.set("test", 123, pathmagic="a+b+c")
 
