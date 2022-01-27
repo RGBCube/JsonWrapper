@@ -33,7 +33,7 @@ class _JsonUtils:
             with open(self.json_path, mode="r") as json_file:
                 data = json.load(json_file)
 
-        except (FileNotFoundError, ValueError):
+        except (FileNotFoundError, JSONDecodeError):
             with open(self.json_path, mode="w") as json_file:
                 json.dump({}, json_file)
                 return
