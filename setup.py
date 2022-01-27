@@ -6,11 +6,11 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="json_wrapper",
-    description="Easy to use JSON wrapper packed with features",
+    description="Easy to use JSON wrapper packed with features.",
     long_description=long_description,
     long_description_content_type='text/markdown',
     url="https://github.com/RGBCube/json_wrapper",
-    version="1.0.2",
+    version="1.1.0",
     author="RGBCube",
     py_modules=["json_wrapper"],
     license="CC0 1.0 Universal"
