@@ -47,7 +47,7 @@ class _PathMagic:
 
     @staticmethod
     def set(main_dict: dict, path: Union[str, List[str]], *, dump: dict) -> dict:
-        """TODO: write description
+        """Sets the key value pair in the path given. Will override.
 
         Args:
             main_dict (dict): The dict to modify.
@@ -89,7 +89,7 @@ class _PathMagic:
 
     @staticmethod
     def get(main_dict: dict, path: Union[str, List[str]], *, key: str, default=None) -> Any:
-        """TODO: write description
+        """Gets the value for the key in the path given. Will return the default kwarg if the key can't be found.
 
         Args:
             main_dict (dict): The dict to get the value of the key in.
@@ -114,7 +114,7 @@ class _PathMagic:
 
     @staticmethod
     def rem(main_dict: dict, path: Union[str, List[str]], *, key: str) -> dict:
-        """TODO: write description
+        """Removes a key value pair from the path given.
 
         Args:
             main_dict (dict): The dict to modify.
