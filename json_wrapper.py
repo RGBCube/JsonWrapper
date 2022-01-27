@@ -33,13 +33,12 @@ class _JsonUtils:
             with open(self.json_path, mode="r") as json_file:
                 data = json.load(json_file)
 
-        except (FileNotFoundError, JSONDecodeError):
+        except (FileNotFoundError, json.JSONDecodeError):
             with open(self.json_path, mode="w") as json_file:
                 json.dump({}, json_file)
                 return
 
         if not isinstance(data, dict):
-            print("test")
             with open(self.json_path, mode="w") as json_file:
                 json.dump({}, json_file)
 
@@ -142,6 +141,39 @@ class _PathMagic:
 
         return main_dict_ref
 
+    @staticmethod
+    def nuke(main_dict: dict, path: Union[str, List[str]]) -> dict:
+        """Nukes the given path in the main_dict.
+
+        Args:
+            main_dict (dict): The dict to modify.
+            path (Union[str, List[str]]): The path to follow.
+
+        Returns:
+            dict: The modified dict.
+        """
+        main_dict_ref, i = main_dict, 0
+
+        if isinstance(path, str):
+            path = path.split("+")
+
+        if len(path) == 1:  # lazy but works
+            main_dict[path[-1]] = {}
+
+        else:
+            for dict_name in path:
+                try:
+                    i += 1
+                    main_dict = main_dict[dict_name]
+                    if i == len(path) - 1:
+                        main_dict[path[-1]] = {}
+                        break
+
+                except (KeyError, TypeError, AttributeError):
+                    return main_dict_ref
+
+        return main_dict_ref
+
 
 class JsonWrapper:
 
@@ -181,7 +213,7 @@ class JsonWrapper:
 
         Returns:
             Any: The value of the key. Will return the default kwarg if the key is not found.
-        """        
+        """
         self.json.validate()
 
         json_data = self.json.data()
@@ -189,9 +221,10 @@ class JsonWrapper:
         if pathmagic == "" or pathmagic == []:
             return json_data.get(key, default)
 
-        return self.pathmagic.get(json_data, pathmagic, key=key, default=default)
+        else:
+            return self.pathmagic.get(json_data, pathmagic, key=key, default=default)
 
-    def all(self) -> dict: # The same as _JsonUtils.data()
+    def all(self) -> dict:  # The same as _JsonUtils.data()
         """Returns all the json data.
 
         Returns:
@@ -207,7 +240,7 @@ class JsonWrapper:
         Args:
             key (str): The key to remove.
             pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
-        """        
+        """
         self.json.validate()
 
         json_data = self.json.data()
@@ -228,10 +261,6 @@ class JsonWrapper:
         """
         if pathmagic == "" or pathmagic == []:
             self.json.dump({})
-            return
 
-        elif isinstance(pathmagic, str):
-            pathmagic = pathmagic.split("+")
-            pm_last = pathmagic.pop()
-
-        self.json.dump(self.pathmagic.set(self.json.data(), pathmagic, dump={pm_last: {}}))
+        else:
+            self.json.dump(self.pathmagic.nuke(self.json.data(), pathmagic))
