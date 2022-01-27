@@ -5,7 +5,7 @@ Execute `pip install json-wrapper`.
 
 Add `from json_wrapper import JsonWrapper` to the top of your project.
 # 🔗 Important Links
-[Documentation]() SOON™
+[Documentation]() ![soon™](https://cdn.discordapp.com/emojis/881521960255914014.webp?size=32&quality=lossless)
 
 [PyPI: json-wrapper](https://pypi.org/project/json-wrapper/)
 
