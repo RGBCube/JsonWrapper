@@ -95,7 +95,7 @@ class _PathMagic:
             main_dict (dict): The dict to get the value of the key in.
             path (Union[str, List[str]]): The path to follow.
             key (str): The key to get the value of.
-            default ([type], optional): The value to return if the key is not found. Defaults to None.
+            default (Any, optional): The value to return if the key is not found. Defaults to None.
 
         Returns:
             Any: The value of the key. Will return the default kwarg if the key is not found.
@@ -188,7 +188,7 @@ class JsonWrapper:
 
         Args:
             key (str): The key for the key value pair.
-            value ([type]): The value for the key value pair.
+            value (Any): The value for the key value pair.
             pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
         """
         self.json.validate()
@@ -208,7 +208,7 @@ class JsonWrapper:
 
         Args:
             key (str): The key to get the value of.
-            default ([type], optional): The value to return if the key is not found. Defaults to None.
+            default (Any, optional): The value to return if the key is not found. Defaults to None.
             pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
 
         Returns:
