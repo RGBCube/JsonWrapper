@@ -14,7 +14,7 @@ Sets the key value pair in the json.
 
 If the pathmagic kwarg is given, (if str)it will split it by the +'s and make dicts inside dicts(or use existing ones) until the list ends. Then it will set the key value pair in the last dict.
 
-#### Args:
+#### Args
 * key (`str`): The key for the key value pair.
 * value (`Any`): The value for the key value pair.
 * pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
@@ -26,12 +26,12 @@ Returns the key's value in the json. Will return the default kwarg if not found.
 
 If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will return the value of the key in the last dict. The default kwarg applies.
 
-#### Args:
+#### Args
 * key (`str`): The key to get the value of.
 * default (`Any`, optional): The value to return if the key is not found. Defaults to `None`.
 * pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
 
-#### Returns:
+#### Returns
 * `Any`: The value of the key. Will return the default kwarg if the key is not found.
 
 #### [Example Usage]() TODO
@@ -39,7 +39,7 @@ If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow 
 ## *def* `all()`
 Returns all the json data.
 
-#### Returns:
+#### Returns
 * `dict`: All the json data.
 
 #### [Example Usage]() TODO
@@ -49,7 +49,7 @@ Removes the key value pair in the json.
 
 If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will remove the key value pair in the last dict. Does nothing if the key value pair doesn't exist.
 
-#### Args:
+#### Args
 * key (`str`): The key to remove.
 * pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
 
@@ -60,7 +60,7 @@ Nukes the entire database.
 
 If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will nuke the last dict.
 
-#### Args:
+#### Args
 * pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
 
 #### [Example Usage]() TODO
