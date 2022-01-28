@@ -1,5 +1,5 @@
-# 📋 Table of Contents
-<!-- will be updated soon -->
+### Table of Contents
+* [*class* `json_wrapper.JsonWrapper(json_path: str)`](https://github.com/RGBCube/json-wrapper/tree/main/docs#class-json_wrapperjsonwrapperjson_path-str)
 # *class* `json_wrapper.JsonWrapper(json_path: str)`
 ### Methods
 * [*def* `set(key: str, value, *, pathmagic: (str, list) = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-setkey-str-value--pathmagic-str-list--)
