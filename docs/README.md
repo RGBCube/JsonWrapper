@@ -33,3 +33,13 @@ If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow 
 
 #### Returns:
 * `Any`: The value of the key. Will return the default kwarg if the key is not found.
+
+#### [Example Usage]() TODO
+
+## *def* `all()`
+Returns all the json data.
+
+#### Returns:
+* `dict`: All the json data.
+
+#### [Example Usage]() TODO
