@@ -4,7 +4,7 @@
 
 ### Methods
 * [*def* `set(key: str, value, *, pathmagic: (str, list) = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-setkey-str-value--pathmagic-str-list--)
-* [*def* `get(key: str, *, default=None, pathmagic: (str, list) = "")`]() TODO
+* [*def* `get(key: str, *, default=None, pathmagic: (str, list) = "")`](https://github.com/RGBCube/json-wrapper/blob/main/docs/README.md#def-getkey-str--defaultnone-pathmagic-str-list--)
 * [*def* `all()`]() TODO
 * [*def* `rem(key: str, *, pathmagic: (str, list) = "")`]() TODO
 * [*def* `nuke(*, pathmagic: (str, list) = "")`]() TODO
