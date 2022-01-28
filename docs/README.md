@@ -3,11 +3,11 @@
 # *class* `json_wrapper.JsonWrapper(json_path: str)`
 
 ### Methods
-* [*def* `set(key: str, value, *, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-setkey-str-value--pathmagic-str-list--)
-* [*def* `get(key: str, *, default=None, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/blob/main/docs/README.md#def-getkey-str--defaultnone-pathmagic-str-list--)
+* [*def* `set(key: str, value, *, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-setkey-str-value--pathmagic-unionstr-liststr--)
+* [*def* `get(key: str, *, default=None, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-getkey-str--defaultnone-pathmagic-unionstr-liststr--)
 * [*def* `all()`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-all)
-* [*def* `rem(key: str, *, pathmagic: Union[str, List[str] = "")`]()
-* [*def* `nuke(*, pathmagic: Union[str, List[str] = "")`]()
+* [*def* `rem(key: str, *, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-remself-key-str--pathmagic-unionstr-liststr--)
+* [*def* `nuke(*, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/blob/main/docs/README.md#def-nuke-pathmagic-unionstr-liststr--)
 
 ## *def* `set(key: str, value, *, pathmagic: Union[str, List[str] = "")`
 Sets the key value pair in the json.
