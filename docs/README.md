@@ -3,13 +3,13 @@
 # *class* `json_wrapper.JsonWrapper(json_path: str)`
 
 ### Methods
-* [*def* `set(key: str, value, *, pathmagic: (str, list) = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-setkey-str-value--pathmagic-str-list--)
-* [*def* `get(key: str, *, default=None, pathmagic: (str, list) = "")`](https://github.com/RGBCube/json-wrapper/blob/main/docs/README.md#def-getkey-str--defaultnone-pathmagic-str-list--)
+* [*def* `set(key: str, value, *, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-setkey-str-value--pathmagic-str-list--)
+* [*def* `get(key: str, *, default=None, pathmagic: Union[str, List[str] = "")`](https://github.com/RGBCube/json-wrapper/blob/main/docs/README.md#def-getkey-str--defaultnone-pathmagic-str-list--)
 * [*def* `all()`](https://github.com/RGBCube/json-wrapper/tree/main/docs#def-all)
-* [*def* `rem(key: str, *, pathmagic: (str, list) = "")`]() TODO
-* [*def* `nuke(*, pathmagic: (str, list) = "")`]() TODO
+* [*def* `rem(key: str, *, pathmagic: Union[str, List[str] = "")`]()
+* [*def* `nuke(*, pathmagic: Union[str, List[str] = "")`]()
 
-## *def* `set(key: str, value, *, pathmagic: (str, list) = "")`
+## *def* `set(key: str, value, *, pathmagic: Union[str, List[str] = "")`
 Sets the key value pair in the json.
 
 If the pathmagic kwarg is given, (if str)it will split it by the +'s and make dicts inside dicts(or use existing ones) until the list ends. Then it will set the key value pair in the last dict.
@@ -21,7 +21,7 @@ If the pathmagic kwarg is given, (if str)it will split it by the +'s and make di
 
 #### [Example Usage]() TODO
 
-## *def* `get(key: str, *, default=None, pathmagic: (str, list) = "")`
+## *def* `get(key: str, *, default=None, pathmagic: Union[str, List[str] = "")`
 Returns the key's value in the json. Will return the default kwarg if not found.
 
 If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will return the value of the key in the last dict. The default kwarg applies.
@@ -41,5 +41,26 @@ Returns all the json data.
 
 #### Returns:
 * `dict`: All the json data.
+
+#### [Example Usage]() TODO
+
+## *def* `rem(self, key: str, *, pathmagic: Union[str, List[str]] = "")`
+Removes the key value pair in the json.
+
+If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will remove the key value pair in the last dict. Does nothing if the key value pair doesn't exist.
+
+#### Args:
+* key (`str`): The key to remove.
+* pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
+
+#### [Example Usage]() TODO
+
+## *def* `nuke(*, pathmagic: Union[str, List[str]] = "")`
+Nukes the entire database.
+
+If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will nuke the last dict.
+
+#### Args:
+* pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
 
 #### [Example Usage]() TODO
