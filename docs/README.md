@@ -19,7 +19,7 @@ If the pathmagic kwarg is given, (if str)it will split it by the +'s and make di
 * value (`Any`): The value for the key value pair.
 * pathmagic (`Union[str, List[str]]`, optional): The path to follow. Defaults to `""`.
 
-#### [Example Usage]() TODO
+#### [Example Usage](https://github.com/RGBCube/json-wrapper/blob/main/examples/set.py)
 
 ## *def* `get(key: str, *, default=None, pathmagic: Union[str, List[str] = "")`
 Returns the key's value in the json. Will return the default kwarg if not found.
