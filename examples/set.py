@@ -18,6 +18,6 @@ db.set("a", 123, pathmagic="example+path")
 
 data = db.all()
 
-print(data)  # 'example': {'path': {'a': 123}}}
+print(data)  # {'example': {'path': {'a': 123}}}
 
 db.nuke()
