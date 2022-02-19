@@ -67,7 +67,7 @@ class _PathMagic:
             Returns:
                 dict: The modified dict.
             """
-            if key in alt_dict.keys() and isinstance(alt_dict[key], dict):
+            if key in alt_dict and isinstance(alt_dict[key], dict):
                 return alt_dict
 
             alt_dict[key] = {}
@@ -195,7 +195,7 @@ class JsonWrapper:
 
         json_data = self.json.data()
 
-        if pathmagic == "" or pathmagic == []:
+        if pathmagic in ["", []]:
             json_data[key] = value
             self.json.dump(json_data)
 
@@ -218,7 +218,7 @@ class JsonWrapper:
 
         json_data = self.json.data()
 
-        if pathmagic == "" or pathmagic == []:
+        if pathmagic in ["", []]:
             return json_data.get(key, default)
 
         else:
@@ -245,7 +245,7 @@ class JsonWrapper:
 
         json_data = self.json.data()
 
-        if pathmagic == "" or pathmagic == []:
+        if pathmagic in ["", []]:
             json_data.pop(key, None)
             self.json.dump(json_data)
 
@@ -259,7 +259,7 @@ class JsonWrapper:
         Args:
             pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
         """
-        if pathmagic == "" or pathmagic == []:
+        if pathmagic in ["", []]:
             self.json.dump({})
 
         else:
