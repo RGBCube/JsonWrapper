@@ -1,266 +1,194 @@
 import json
-import os
-from typing import Any, Union, List
+from typing import Any, Union
 
 
-class _JsonUtils:
+class JsonBase:
 
-    def __init__(self, json_path: str) -> None:
-        self.json_path = json_path
+    def __init__(self, *, fp: str, indent: int) -> None:
+        self._fp = fp
+        self._indent_size = indent
 
+    @property
     def data(self) -> dict:
-        """Returns all the json data.
-
-        Returns:
-            dict: All the json data.
-        """
-        with open(self.json_path, mode="r") as json_file:
-            return json.load(json_file)
+        """Returns the all data of the json file."""
+        with open(self._fp) as f:
+            return json.load(f)
 
     def dump(self, data: dict) -> None:
-        """Dumps the dict into the json.
-
-        Args:
-            data (dict): The data to dump.
-        """
-        with open(self.json_path, mode="w") as json_file:
-            json.dump(data, json_file, indent=4)
+        """Dumps the data to the json file."""
+        with open(self._fp, mode="w") as f:
+            json.dump(data, f, indent=self._indent_size)
 
     def validate(self) -> None:
-        """Validates the json if the json is not a valid dict.
-        """
+        """Validates the json file."""
         try:
-            with open(self.json_path, mode="r") as json_file:
-                data = json.load(json_file)
-
+            with open(self._fp, mode="r") as f:
+                data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
-            with open(self.json_path, mode="w") as json_file:
-                json.dump({}, json_file)
+            with open(self._fp, mode="w") as f:
+                json.dump({}, f)
                 return
-
         if not isinstance(data, dict):
-            with open(self.json_path, mode="w") as json_file:
-                json.dump({}, json_file)
+            with open(self._fp, mode="w") as f:
+                json.dump({}, f)
 
 
-class _PathMagic:
+class JsonWrapper(JsonBase):
 
-    @staticmethod
-    def set(main_dict: dict, path: Union[str, List[str]], *, dump: dict) -> dict:
-        """Sets the key value pair in the path given. Will override.
+    def __init__(self, fp: str, *, indent: int = 4) -> None:
+        super().__init__(fp=fp, indent=indent)
+        self.validate()
 
-        Args:
-            main_dict (dict): The dict to modify.
-            path (Union[str, List[str]]): The path to follow.
-            dump (dict): The key value pairs to set in the last scope.
-
-        Returns:
-            dict: The modified dict.
-        """
-        def magic(alt_dict: dict, key: str) -> dict:
-            """Validates the key(dict) in the alt_dict.
-
-            Args:
-                alt_dict (dict): The dict to modify.
-                key (str): The key to validate(dict).
-
-            Returns:
-                dict: The modified dict.
-            """
-            if key in alt_dict and isinstance(alt_dict[key], dict):
-                return alt_dict
-
-            alt_dict[key] = {}
-            return alt_dict
-
-        main_dict_ref, i = main_dict, 0
-
-        if isinstance(path, str):
-            path = path.split("+")
-
-        for dict_name in path:
-            i += 1
-            main_dict = magic(main_dict, dict_name)[dict_name]
-
-            if i == len(path):
-                main_dict.update(dump)
-
-        return main_dict_ref
-
-    @staticmethod
-    def get(main_dict: dict, path: Union[str, List[str]], *, key: str, default=None) -> Any:
-        """Gets the value for the key in the path given. Will return the default kwarg if the key can't be found.
+    def get(self, path: str = "", default: Any = None) -> Union[str, int, bool, dict, list, None]:
+        """Returns the value of the key in given path. If the key is not found in the path, returns the default value.
 
         Args:
-            main_dict (dict): The dict to get the value of the key in.
-            path (Union[str, List[str]]): The path to follow.
-            key (str): The key to get the value of.
-            default (Any, optional): The value to return if the key is not found. Defaults to None.
+            path (str): The path to the key. If the path is not given, returns the whole json as a dict.
+            default (Any): The default value.
 
         Returns:
-            Any: The value of the key. Will return the default kwarg if the key is not found.
+            Union[str, int, bool, dict, list, None]: The value of the key in given path.
         """
-        if isinstance(path, str):
-            path = path.split("+")
-
-        for dict_name in path:
-            try:
-                main_dict = main_dict[dict_name]
-
-            except (KeyError, TypeError, AttributeError):
+        self.validate()
+        path, data = [p for p in path.split(".") if p != ""], self.data
+        for p in path:
+            if p not in data:
                 return default
+            data = data[p]
+        return data
 
-        return main_dict.get(key, default)
-
-    @staticmethod
-    def rem(main_dict: dict, path: Union[str, List[str]], *, key: str) -> dict:
-        """Removes a key value pair from the path given.
+    def set(self, path: str, value: Union[str, int, bool, dict, list, None], *, force: bool = False) -> None:
+        """Sets the path to the value. If the path is not found, creates the path.
+        If the path is blocked by a non-dictionary value, it will raise TypeError, to override this behavior, set force to True.
 
         Args:
-            main_dict (dict): The dict to modify.
-            path (Union[str, List[str]]):The path to follow.
-            key (str): The key for the key value pair to remove.
+            path (str): The path to set the value in.
+            value (Union[str, int, bool, dict, list, None]): The value to set.
+            force (bool): If True, it overrides the path if the path is blocked by a non-dictionary value.
+
+        Raises:
+            ValueError: If the path is an empty string.
+            TypeError: If the path is blocked by a non-dictionary value and force is False.
+        """
+        self.validate()
+        path, data = [p for p in path.split(".") if p != ""], self.data
+        reference = data
+        if not path:
+            raise ValueError("Path is empty.")
+        for p in path[:-1]:
+            if p not in data.keys():
+                data[p] = {}
+            elif not isinstance(data[p], dict):
+                if force:
+                    data[p] = {}
+                else:
+                    raise TypeError("Path is blocked by a non-dictionary value. Use force=True to override.")
+            data = data[p]
+        data[path[-1]] = value
+        self.dump(reference)
+
+    def rem(self, path: str = "") -> bool:
+        """Removes the key in given path.
+
+        Args:
+            path (str): The path to the key. If the path is not given, nukes the whole json.
 
         Returns:
-            dict: The modified dict.
+            bool: True if the key was removed, False if the key was not found.
         """
-        main_dict_ref, i = main_dict, 0
+        self.validate()
+        path, data = [p for p in path.split(".") if p != ""], self.data
+        reference = data
+        if not path:
+            if data:
+                self.dump({})
+                return True
+            return False
+        for p in path[:-1]:
+            if p not in data.keys():
+                return False
+            elif not isinstance(data[p], dict):
+                return False
+            data = data[p]
+        if path[-1] not in data.keys():
+            return False
+        del data[path[-1]]
+        self.dump(reference)
+        return True
 
-        if isinstance(path, str):
-            path = path.split("+")
+    def __contains__(self, key: str) -> bool:
+        self.validate()
+        return key in self.data
 
-        for dict_name in path:
-            try:
-                i += 1
-                main_dict = main_dict[dict_name]
-                if i == len(path):
-                    main_dict.pop(key, None)
+    def __delitem__(self, key: str) -> None:
+        self.validate()
+        data = self.data
+        del data[key]
+        self.dump(data)
 
-            except (KeyError, TypeError, AttributeError):
-                return main_dict_ref
+    def __eq__(self, other: Any) -> bool:
+        return self.data == other
 
-        return main_dict_ref
+    def __getitem__(self, key: str) -> Union[str, int, bool, dict, list, None]:
+        self.validate()
+        return self.data[key]
 
-    @staticmethod
-    def nuke(main_dict: dict, path: Union[str, List[str]]) -> dict:
-        """Nukes the given path in the main_dict.
+    def __ge__(self, other: Any) -> bool:
+        self.validate()
+        return self.data >= other
 
-        Args:
-            main_dict (dict): The dict to modify.
-            path (Union[str, List[str]]): The path to follow.
+    def __gt__(self, other: Any) -> bool:
+        self.validate()
+        return self.data > other
 
-        Returns:
-            dict: The modified dict.
-        """
-        main_dict_ref, i = main_dict, 0
+    def __ior__(self, other) -> None:
+        self.validate()
+        data = self.data
+        data.update(other)
+        self.dump(data)
 
-        if isinstance(path, str):
-            path = path.split("+")
+    def __iter__(self):
+        self.validate()
+        return iter(self.data)
 
-        if len(path) == 1:  # lazy but works
-            main_dict[path[-1]] = {}
+    def __len__(self) -> int:
+        self.validate()
+        return len(self.data)
 
-        else:
-            for dict_name in path:
-                try:
-                    i += 1
-                    main_dict = main_dict[dict_name]
-                    if i == len(path) - 1:
-                        main_dict[path[-1]] = {}
-                        break
+    def __le__(self, other: Any) -> bool:
+        self.validate()
+        return self.data <= other
 
-                except (KeyError, TypeError, AttributeError):
-                    return main_dict_ref
+    def __lt__(self, other: Any) -> bool:
+        self.validate()
+        return self.data < other
 
-        return main_dict_ref
+    def __ne__(self, other: Any) -> bool:
+        self.validate()
+        return self.data != other
 
+    def __or__(self, other: Any) -> Any:
+        self.validate()
+        return self.data | other
 
-class JsonWrapper:
+    def __repr__(self) -> str:
+        self.validate()
+        return repr(self.data)
 
-    def __init__(self, json_path: str) -> None:
-        self.json_path = json_path
-        self.pathmagic = _PathMagic
-        self.json = _JsonUtils(json_path)
-        self.json.validate()
+    def __reversed__(self):
+        self.validate()
+        return reversed(self.data)
 
-    def set(self, key: str, value, *, pathmagic: Union[str, List[str]] = "") -> None:
-        """Sets the key value pair in the json. If the pathmagic kwarg is given, (if str)it will split it by the +'s and make dicts inside dicts(or use existing ones) until the list ends. Then it will set the key value pair in the last dict.
+    def __ror__(self, other: Any) -> bool:
+        self.validate()
+        return other | self.data
 
-        Args:
-            key (str): The key for the key value pair.
-            value (Any): The value for the key value pair.
-            pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
-        """
-        self.json.validate()
+    def __setitem__(self, key: str, value: Union[str, int, bool, dict, list, None]) -> None:
+        self.validate()
+        data = self.data
+        data[key] = value
+        self.dump(data)
 
-        json_data = self.json.data()
-
-        if pathmagic in ["", []]:
-            json_data[key] = value
-            self.json.dump(json_data)
-
-        else:
-            self.json.dump(self.pathmagic.set(
-                json_data, pathmagic, dump={key: value}))
-
-    def get(self, key: str, *, default=None, pathmagic: Union[str, List[str]] = "") -> Any:
-        """Returns the key's value in the json. Will return the default kwarg if not found. If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will return the value of the key in the last dict. The default kwarg applies.
-
-        Args:
-            key (str): The key to get the value of.
-            default (Any, optional): The value to return if the key is not found. Defaults to None.
-            pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
-
-        Returns:
-            Any: The value of the key. Will return the default kwarg if the key is not found.
-        """
-        self.json.validate()
-
-        json_data = self.json.data()
-
-        if pathmagic in ["", []]:
-            return json_data.get(key, default)
-
-        else:
-            return self.pathmagic.get(json_data, pathmagic, key=key, default=default)
-
-    def all(self) -> dict:  # The same as _JsonUtils.data()
-        """Returns all the json data.
-
-        Returns:
-            dict: All the json data.
-        """
-        self.json.validate()
-
-        return self.json.data()
-
-    def rem(self, key: str, *, pathmagic: Union[str, List[str]] = "") -> None:
-        """Removes the key value pair in the json. If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will remove the key value pair in the last dict. Does nothing if the key value pair doesn't exist.
-
-        Args:
-            key (str): The key to remove.
-            pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
-        """
-        self.json.validate()
-
-        json_data = self.json.data()
-
-        if pathmagic in ["", []]:
-            json_data.pop(key, None)
-            self.json.dump(json_data)
-
-        else:
-            self.json.dump(self.pathmagic.rem(
-                json_data, pathmagic, key=key))
-
-    def nuke(self, *, pathmagic: Union[str, List[str]] = "") -> None:
-        """Nukes the entire database. If the pathmagic kwarg is given, (if str)it will split it by the +'s and follow the dicts inside the dicts until the list ends. Then it will nuke the last dict.
-
-        Args:
-            pathmagic (Union[str, List[str]], optional): The path to follow. Defaults to "".
-        """
-        if pathmagic in ["", []]:
-            self.json.dump({})
-
-        else:
-            self.json.dump(self.pathmagic.nuke(self.json.data(), pathmagic))
+    def __sizeof__(self) -> bytes:
+        self.validate()
+        return bytes(self.data)
