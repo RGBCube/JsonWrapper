@@ -12,4 +12,4 @@ Add `from json_wrapper import JsonWrapper` to the top of your project.
 
 [PyPI: json-wrapper](https://pypi.org/project/json-wrapper/)
 
-[GitHub: RGBCube/json-wrapper](https://github.com/RGBCube/json-wrapper)
+[GitHub: RGBCube/json-wrapper](https://github.com/RGBCube/JsonWrapper)
