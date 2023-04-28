@@ -1,194 +1,184 @@
 import json
-from typing import Any, Union
+
+from io import TextIOWrapper
+from typing import Any
 
 
-class JsonBase:
+JsonType = str | int | bool | dict | list | None
 
-    def __init__(self, *, fp: str, indent: int) -> None:
-        self._fp = fp
-        self._indent_size = indent
 
-    @property
-    def data(self) -> dict:
-        """Returns the all data of the json file."""
-        with open(self._fp) as f:
-            return json.load(f)
+class JsonFile:
+    def __init__(self, path: str, **kwargs: Any) -> None:
+        self.path = path
+        self._json_kwargs = kwargs
 
-    def dump(self, data: dict) -> None:
-        """Dumps the data to the json file."""
-        with open(self._fp, mode="w") as f:
-            json.dump(data, f, indent=self._indent_size)
+    def open(self, mode: str = "r", /) -> TextIOWrapper:
+        return open(self.path, mode)
 
-    def validate(self) -> None:
-        """Validates the json file."""
+    def dump(self, data: dict, /) -> None:
+        """Dumps the data to the JSON file."""
+        with self.open("w") as file:
+            json.dump(data, file, **self._json_kwargs)
+
+    def data(self) -> dict[Any, Any]:
+        """Returns the all data in the JSON file."""
+        with self.open() as file:
+            return json.load(file, **self._json_kwargs)
+
+    def validate(self) -> dict:
+        """Validates the JSON file contents and returns them."""
         try:
-            with open(self._fp, mode="r") as f:
-                data = json.load(f)
+            data = self.data()
+
+            if not isinstance(data, dict):
+                data = {}
+                self.dump(data)
         except (FileNotFoundError, json.JSONDecodeError):
-            with open(self._fp, mode="w") as f:
-                json.dump({}, f)
-                return
-        if not isinstance(data, dict):
-            with open(self._fp, mode="w") as f:
-                json.dump({}, f)
+            data = {}
+            self.dump(data)
 
-
-class JsonWrapper(JsonBase):
-
-    def __init__(self, fp: str, *, indent: int = 4) -> None:
-        super().__init__(fp=fp, indent=indent)
-        self.validate()
-
-    def get(self, path: str = "", default: Any = None) -> Union[str, int, bool, dict, list, None]:
-        """Returns the value of the key in given path. If the key is not found in the path, returns the default value.
-
-        Args:
-            path (str): The path to the key. If the path is not given, returns the whole json as a dict.
-            default (Any): The default value.
-
-        Returns:
-            Union[str, int, bool, dict, list, None]: The value of the key in given path.
-        """
-        self.validate()
-        path, data = [p for p in path.split(".") if p != ""], self.data
-        for p in path:
-            if p not in data:
-                return default
-            data = data[p]
         return data
 
-    def set(self, path: str, value: Union[str, int, bool, dict, list, None], *, force: bool = False) -> None:
+
+class JsonWrapper(JsonFile):
+    def __init__(self, path: str, /, *, indent: int = 4) -> None:
+        super().__init__(path, indent=indent)
+        self.validate()
+
+    def get(self, path: str | list[str] = [], /, default: Any = None) -> JsonType:
+        """
+        Returns the value of the key in given path. If the key is not found in the path, returns the default value.
+        For example, if `jw.get("foo.bar.baz")` is called and the JSON is `{"foo": {"bar": {"baz": 123}}}`, `123` will be returned.
+        
+        Args:
+            path: The path to the key. If not given, returns the whole JSON.
+            default: The default value.
+
+        Returns:
+            The value of the key in given path.
+        """
+        data = self.validate()
+        path = path.split(".") if isinstance(path, str) else path
+
+        for part in path:
+            if part not in data:
+                return default
+
+            data = data[p]
+
+        return data
+
+    def set(self, path: str | list[str], value: JsonType, /, *, force: bool = False) -> None:
         """Sets the path to the value. If the path is not found, creates the path.
         If the path is blocked by a non-dictionary value, it will raise TypeError, to override this behavior, set force to True.
 
+        Note: Use `JsonWrapper.dump` if you want to set the whole JSON to a dict.
+
         Args:
-            path (str): The path to set the value in.
-            value (Union[str, int, bool, dict, list, None]): The value to set.
-            force (bool): If True, it overrides the path if the path is blocked by a non-dictionary value.
+            path: The path to set the value in.
+            value: The value to set.
+            force: If True, it overrides the path if the path is blocked by a non-dictionary value.
 
         Raises:
-            ValueError: If the path is an empty string.
-            TypeError: If the path is blocked by a non-dictionary value and force is False.
+            ValueError: If the path is an empty string. See note.
+            TypeError: If the path is blocked by a non-dictionary value while force is False.
         """
-        self.validate()
-        path, data = [p for p in path.split(".") if p != ""], self.data
-        reference = data
+        data = self.validate()
+        data_root = data
+
+        path = path.split(".") if isinstance(path, str) else path
+
         if not path:
             raise ValueError("Path is empty.")
+
+        # All except the last.
         for p in path[:-1]:
-            if p not in data.keys():
+            if p not in data:
                 data[p] = {}
+
             elif not isinstance(data[p], dict):
                 if force:
                     data[p] = {}
                 else:
                     raise TypeError("Path is blocked by a non-dictionary value. Use force=True to override.")
-            data = data[p]
-        data[path[-1]] = value
-        self.dump(reference)
 
-    def rem(self, path: str = "") -> bool:
+            data = data[p]
+
+        data[path[-1]] = value
+
+        self.dump(data_root)
+
+    def rem(self, path: str | list[str] = [], /) -> bool:
         """Removes the key in given path.
 
         Args:
-            path (str): The path to the key. If the path is not given, nukes the whole json.
+            path: The path to the key. If the path is not given, nukes the whole json.
 
         Returns:
             bool: True if the key was removed, False if the key was not found.
         """
-        self.validate()
-        path, data = [p for p in path.split(".") if p != ""], self.data
-        reference = data
+        data = self.validate()
+        data_root = data
+
+        path = path.split(".") if isinstance(path, str) else path
+
         if not path:
             if data:
                 self.dump({})
                 return True
+
             return False
-        for p in path[:-1]:
-            if p not in data.keys():
+
+        # All except the last.
+        for part in path[:-1]:
+            if part not in data or not isinstance(data[part], dict):
                 return False
-            elif not isinstance(data[p], dict):
-                return False
-            data = data[p]
-        if path[-1] not in data.keys():
+
+            data = data[part]
+
+        if path[-1] not in data:
             return False
+
         del data[path[-1]]
-        self.dump(reference)
+
+        self.dump(data_root)
         return True
 
-    def __contains__(self, key: str) -> bool:
-        self.validate()
-        return key in self.data
-
-    def __delitem__(self, key: str) -> None:
-        self.validate()
-        data = self.data
-        del data[key]
-        self.dump(data)
-
-    def __eq__(self, other: Any) -> bool:
-        return self.data == other
-
-    def __getitem__(self, key: str) -> Union[str, int, bool, dict, list, None]:
-        self.validate()
-        return self.data[key]
-
-    def __ge__(self, other: Any) -> bool:
-        self.validate()
-        return self.data >= other
-
-    def __gt__(self, other: Any) -> bool:
-        self.validate()
-        return self.data > other
-
-    def __ior__(self, other) -> None:
-        self.validate()
-        data = self.data
-        data.update(other)
-        self.dump(data)
-
-    def __iter__(self):
-        self.validate()
-        return iter(self.data)
-
-    def __len__(self) -> int:
-        self.validate()
-        return len(self.data)
-
-    def __le__(self, other: Any) -> bool:
-        self.validate()
-        return self.data <= other
-
-    def __lt__(self, other: Any) -> bool:
-        self.validate()
-        return self.data < other
-
-    def __ne__(self, other: Any) -> bool:
-        self.validate()
-        return self.data != other
-
-    def __or__(self, other: Any) -> Any:
-        self.validate()
-        return self.data | other
-
-    def __repr__(self) -> str:
-        self.validate()
-        return repr(self.data)
-
-    def __reversed__(self):
-        self.validate()
-        return reversed(self.data)
-
-    def __ror__(self, other: Any) -> bool:
-        self.validate()
-        return other | self.data
+    def __getitem__(self, key: str, /) -> JsonType:
+        return self.validate()[key]
 
     def __setitem__(self, key: str, value: Union[str, int, bool, dict, list, None]) -> None:
-        self.validate()
-        data = self.data
+        data = self.validate()
         data[key] = value
         self.dump(data)
 
+    def __delitem__(self, key: str, /) -> None:
+        data = self.validate()
+        del data[key]
+        self.dump(data)
+
+    def __contains__(self, key: str, /) -> bool:
+        return key in self.validate()
+
+    def __repr__(self) -> str:
+        return repr(self.validate())
+
+    def __str__(self) -> str:
+        return str(self.validate())
+
+    def __reversed__(self):
+        return reversed(self.validate())
+
+    def __eq__(self, other: Any, /) -> bool:
+        return self.data == other
+
+    def __ior__(self, other: Any) -> bool:
+        data = self.validate()
+        data |= other
+        self.dump(data)        
+
+    def __ror__(self, other: Any) -> bool:
+        return other | self.validate()
+
     def __sizeof__(self) -> bytes:
-        self.validate()
-        return bytes(self.data)
+        return self.validate().__sizeof__()
